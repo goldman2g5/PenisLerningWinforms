@@ -46,12 +46,15 @@ namespace PenisLerningWinforms
             this.dataGridView1.RowTemplate.Height = 24;
             this.dataGridView1.Size = new System.Drawing.Size(776, 239);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellValueChanged);
+            this.dataGridView1.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridView1_UserAddedRow);
+            this.dataGridView1.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridView1_UserDeletedRow);
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(169, 342);
+            this.richTextBox1.Location = new System.Drawing.Point(12, 295);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(441, 96);
+            this.richTextBox1.Size = new System.Drawing.Size(680, 158);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
             // 

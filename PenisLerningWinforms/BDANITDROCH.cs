@@ -21,7 +21,9 @@ namespace PenisLerningWinforms
         {
             List<List<string>> result = new List<List<string>>();
             string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            //LogN(connectionString);
+            if (!(logfield is null))
+                LogN(queryString);
+
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -61,7 +63,7 @@ namespace PenisLerningWinforms
             }
             catch (SqlException ex)
             {
-                //LogN(ex.Message);
+                LogN(ex.Message);
                 return null;
             }
         }
