@@ -16,7 +16,7 @@ namespace PenisLerningWinforms
     {
         private BindingSource bindingSource1 = new BindingSource();
         private SqlDataAdapter dataAdapter = new SqlDataAdapter();
-        private List<string> tables = BDANITDROCH.Execute(
+        private List<string> tables = DataBase.Execute(
         $"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_CATALOG = 'Timur'")[0]; //УЗНАВАТЬ АВТОМАТИЧЕСКИ ИМЯ БД
         string table;
         List<string> columns;
@@ -26,80 +26,59 @@ namespace PenisLerningWinforms
         public Form1()
         {
             InitializeComponent();
-            BDANITDROCH.logfield = richTextBox1;           
-            tables.ForEach(x => comboBox1.Items.Add(x));
-
+            DataBase.LogConsole = richTextBox1;
+            tables.ForEach(x => TableSelectComboBox.Items.Add(x));
         }
 
 
-
-        private void updateZalupa()
+        private void UpdateTableView()
         {
-            values = BDANITDROCH.Execute($"SELECT *  FROM TBL.{table}");
-            dataGridView1.Rows.Clear();
-            dataGridView1.Columns.Clear();
+            columns = DataBase.Execute($"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}' ORDER BY ORDINAL_POSITION")[0];
+            values = DataBase.Execute($"SELECT *  FROM TBL.{table}");
+            TableGridView.Rows.Clear();
+            TableGridView.Columns.Clear();
             List<DataGridViewTextBoxColumn> columnObjects = columns.Select(x => new DataGridViewTextBoxColumn()).ToList();
             columnObjects.ForEach(x => x.HeaderText = columns[columnObjects.IndexOf(x)]);
-            dataGridView1.Columns.AddRange(columnObjects.ToArray());
+            TableGridView.Columns.AddRange(columnObjects.ToArray());
 
             for (int id = 0; id < values[0].Count; id++)
             {
                 DataGridViewRow newRow = new DataGridViewRow();
-                newRow.CreateCells(dataGridView1);
+                newRow.CreateCells(TableGridView);
                 for (int j = 0; j < values.Count - 1; j++)
                 {
                     newRow.Cells[j].Value = values[j][id];
                 }
-                dataGridView1.Rows.Add(newRow);
+                TableGridView.Rows.Add(newRow);
             }
 
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            var tables = BDANITDROCH.Execute($"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_CATALOG = 'Timur'")[0];
-            foreach (var i in tables)
-                richTextBox1.AppendText(i + "");
-            //var result = BDANITDROCH.Execute("SELECT First_Name, Second_Name, Middle_Name FROM TBL.Emploee");
-            //foreach(var i in result)
-            //{
-            //    richTextBox1.AppendText(" ");
-            //    foreach (var j in i) 
-            //        richTextBox1.AppendText(j);
-            //}
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            table = comboBox1.Items[comboBox1.SelectedIndex].ToString();
-            columns = BDANITDROCH.Execute($"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}' ORDER BY ORDINAL_POSITION")[0];
-            updateZalupa();
         }
 
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            var columnsNoId = columns.Skip(1).ToList();
-            if (dataGridView1.CurrentRow.Cells[0].Value is null & !columnsNoId.Any(x => dataGridView1.CurrentRow.Cells[columns.IndexOf(x)].Value is null))
+            if (columns.Skip(1).ToList().Any(x => TableGridView.CurrentRow.Cells[columns.Skip(1).ToList().IndexOf(x)].Value is null))
+                return;
+
+            if (TableGridView.CurrentRow.Cells[0].Value is null)
             {
-                BDANITDROCH.Execute($"INSERT INTO TBL.{table}({columnsNoId.Aggregate((i, j) => i + "," + j)}) VALUES({columnsNoId.Select(x => $"'{dataGridView1.CurrentRow.Cells[columns.IndexOf(x)].Value}'").Aggregate((i, j) => i + "," + j)})");
+                DataBase.InsertRow(table, columns.Select(x => TableGridView.CurrentRow.Cells[columns.IndexOf(x)].Value.ToString()).ToList());
+                return;
             }
-            BDANITDROCH.Execute($"UPDATE TBL.{table} " + $"SET {columnsNoId.Select(x => $"{x}='{dataGridView1.CurrentRow.Cells[columns.IndexOf(x)].Value}'").Aggregate((i, j) => i + "," + j).Trim()} WHERE {columns[0]}={dataGridView1.CurrentRow.Cells[0].Value}");
+
+
+            DataBase.UpdateRow(table, TableGridView.CurrentRow.Cells[0].Value.ToString(), columns.Select(x => TableGridView.CurrentRow.Cells[columns.IndexOf(x)].Value.ToString()).ToList());
         }
 
         private void dataGridView1_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
         {
-            BDANITDROCH.Execute($"DELETE TBL.{table} WHERE {columns[0]}='{e.Row.Cells[0].Value}'");
-            
+            DataBase.DeleteRow(table, e.Row.Cells[0].Value.ToString());
+
         }
 
-        private void dataGridView1_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        private void TableSelectComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //string table = comboBox1.Items[comboBox1.SelectedIndex].ToString();
-            //List<string> columns = BDANITDROCH.Execute($"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}' ORDER BY ORDINAL_POSITION")[0];
-            //List<string> columnsNoId = columns.Skip(1).ToList();
-            //string zapros = $"INSERT INTO TBL.{table}({columnsNoId.Aggregate((i, j) => i + "," + j).Trim()}) VALUES({columnsNoId.Select(x => dataGridView1.CurrentRow.Cells[columnsNoId.IndexOf(x)].Value != null ? dataGridView1.CurrentRow.Cells[columnsNoId.IndexOf(x)].Value : "null").Aggregate((i, j) => i + "," + j)})";
-            //BDANITDROCH.Execute(zapros);
-            //richTextBox1.AppendText(zapros + "\n");
+            table = TableSelectComboBox.Items[TableSelectComboBox.SelectedIndex].ToString();
+            UpdateTableView();
         }
     }
 }
