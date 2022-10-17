@@ -30,6 +30,7 @@ namespace PenisLerningWinforms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.LogConsole = new System.Windows.Forms.RichTextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -37,19 +38,21 @@ namespace PenisLerningWinforms
             this.TableGridView = new System.Windows.Forms.DataGridView();
             this.MainTabControl1 = new Siticone.Desktop.UI.WinForms.SiticoneTabControl();
             this.TablePage = new System.Windows.Forms.TabPage();
-            this.siticoneImageButton1 = new Siticone.Desktop.UI.WinForms.SiticoneImageButton();
             this.TableSelectComboBox = new Siticone.Desktop.UI.WinForms.SiticoneComboBox();
             this.Hui = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.ScalarCommandComboBox = new Siticone.Desktop.UI.WinForms.SiticoneComboBox();
             this.ScalarColumnComboxBox = new Siticone.Desktop.UI.WinForms.SiticoneComboBox();
             this.ScalarValueExecuteButton = new Siticone.Desktop.UI.WinForms.SiticoneButton();
+            this.siticonePictureBox1 = new Siticone.Desktop.UI.WinForms.SiticonePictureBox();
+            this.siticoneImageButton1 = new Siticone.Desktop.UI.WinForms.SiticoneImageButton();
             this.contextMenuStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TableGridView)).BeginInit();
             this.MainTabControl1.SuspendLayout();
             this.TablePage.SuspendLayout();
             this.Hui.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.siticonePictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // LogConsole
@@ -104,7 +107,7 @@ namespace PenisLerningWinforms
             this.MainTabControl1.Controls.Add(this.Hui);
             this.MainTabControl1.Controls.Add(this.tabPage1);
             this.MainTabControl1.ItemSize = new System.Drawing.Size(180, 40);
-            this.MainTabControl1.Location = new System.Drawing.Point(-1, 1);
+            this.MainTabControl1.Location = new System.Drawing.Point(0, 0);
             this.MainTabControl1.Name = "MainTabControl1";
             this.MainTabControl1.SelectedIndex = 0;
             this.MainTabControl1.Size = new System.Drawing.Size(1280, 720);
@@ -130,6 +133,7 @@ namespace PenisLerningWinforms
             // TablePage
             // 
             this.TablePage.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.TablePage.Controls.Add(this.siticonePictureBox1);
             this.TablePage.Controls.Add(this.siticoneImageButton1);
             this.TablePage.Controls.Add(this.TableGridView);
             this.TablePage.Controls.Add(this.TableSelectComboBox);
@@ -139,24 +143,6 @@ namespace PenisLerningWinforms
             this.TablePage.Size = new System.Drawing.Size(1092, 712);
             this.TablePage.TabIndex = 1;
             this.TablePage.Text = "Table";
-            // 
-            // siticoneImageButton1
-            // 
-            this.siticoneImageButton1.CheckedState.ImageSize = new System.Drawing.Size(64, 64);
-            this.siticoneImageButton1.CheckedState.Parent = this.siticoneImageButton1;
-            this.siticoneImageButton1.HoverState.ImageSize = new System.Drawing.Size(64, 64);
-            this.siticoneImageButton1.HoverState.Parent = this.siticoneImageButton1;
-            this.siticoneImageButton1.Image = global::PenisLerningWinforms.Properties.Resources.database;
-            this.siticoneImageButton1.ImageOffset = new System.Drawing.Point(0, 0);
-            this.siticoneImageButton1.ImageRotate = 0F;
-            this.siticoneImageButton1.ImageSize = new System.Drawing.Size(36, 36);
-            this.siticoneImageButton1.Location = new System.Drawing.Point(1034, 0);
-            this.siticoneImageButton1.Name = "siticoneImageButton1";
-            this.siticoneImageButton1.PressedState.ImageSize = new System.Drawing.Size(64, 64);
-            this.siticoneImageButton1.PressedState.Parent = this.siticoneImageButton1;
-            this.siticoneImageButton1.ShadowDecoration.Parent = this.siticoneImageButton1;
-            this.siticoneImageButton1.Size = new System.Drawing.Size(36, 36);
-            this.siticoneImageButton1.TabIndex = 7;
             // 
             // TableSelectComboBox
             // 
@@ -265,12 +251,43 @@ namespace PenisLerningWinforms
             this.ScalarValueExecuteButton.Text = "Execute";
             this.ScalarValueExecuteButton.Click += new System.EventHandler(this.ScalarValueExecuteButton_Click);
             // 
+            // siticonePictureBox1
+            // 
+            this.siticonePictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.siticonePictureBox1.Image = global::PenisLerningWinforms.Properties.Resources.neco_arc_taunt;
+            this.siticonePictureBox1.ImageRotate = 0F;
+            this.siticonePictureBox1.Location = new System.Drawing.Point(793, 270);
+            this.siticonePictureBox1.Name = "siticonePictureBox1";
+            this.siticonePictureBox1.ShadowDecoration.Parent = this.siticonePictureBox1;
+            this.siticonePictureBox1.Size = new System.Drawing.Size(293, 407);
+            this.siticonePictureBox1.TabIndex = 8;
+            this.siticonePictureBox1.TabStop = false;
+            // 
+            // siticoneImageButton1
+            // 
+            this.siticoneImageButton1.CheckedState.ImageSize = new System.Drawing.Size(64, 64);
+            this.siticoneImageButton1.CheckedState.Parent = this.siticoneImageButton1;
+            this.siticoneImageButton1.HoverState.ImageSize = new System.Drawing.Size(64, 64);
+            this.siticoneImageButton1.HoverState.Parent = this.siticoneImageButton1;
+            this.siticoneImageButton1.Image = global::PenisLerningWinforms.Properties.Resources.database;
+            this.siticoneImageButton1.ImageOffset = new System.Drawing.Point(0, 0);
+            this.siticoneImageButton1.ImageRotate = 0F;
+            this.siticoneImageButton1.ImageSize = new System.Drawing.Size(36, 36);
+            this.siticoneImageButton1.Location = new System.Drawing.Point(1034, 0);
+            this.siticoneImageButton1.Name = "siticoneImageButton1";
+            this.siticoneImageButton1.PressedState.ImageSize = new System.Drawing.Size(64, 64);
+            this.siticoneImageButton1.PressedState.Parent = this.siticoneImageButton1;
+            this.siticoneImageButton1.ShadowDecoration.Parent = this.siticoneImageButton1;
+            this.siticoneImageButton1.Size = new System.Drawing.Size(36, 36);
+            this.siticoneImageButton1.TabIndex = 7;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 681);
             this.Controls.Add(this.MainTabControl1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Penis Lerning";
@@ -280,6 +297,7 @@ namespace PenisLerningWinforms
             this.TablePage.ResumeLayout(false);
             this.Hui.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.siticonePictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -299,6 +317,7 @@ namespace PenisLerningWinforms
         private Siticone.Desktop.UI.WinForms.SiticoneComboBox ScalarCommandComboBox;
         private Siticone.Desktop.UI.WinForms.SiticoneComboBox ScalarColumnComboxBox;
         private Siticone.Desktop.UI.WinForms.SiticoneButton ScalarValueExecuteButton;
+        private Siticone.Desktop.UI.WinForms.SiticonePictureBox siticonePictureBox1;
     }
 }
 

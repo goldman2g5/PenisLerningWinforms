@@ -35,27 +35,23 @@ namespace PenisLerningWinforms
 
         private void UpdateTableView()
         {
-            db.Update();
             UpdateComboboxes();
             TableGridView.Rows.Clear();
             TableGridView.Columns.Clear();
             List<DataGridViewTextBoxColumn> columnObjects = db.columns.Select(x => new DataGridViewTextBoxColumn()).ToList();
             columnObjects.ForEach(x => x.HeaderText = db.columns[columnObjects.IndexOf(x)]);
             TableGridView.Columns.AddRange(columnObjects.ToArray());
-
+            if (db.values.Count <= 0) return;
             for (int id = 0; id < db.values[0].Count; id++)
             {
                 DataGridViewRow newRow = new DataGridViewRow();
                 newRow.CreateCells(TableGridView);
-                for (int j = 0; j < db.values.Count - 1; j++)
+                for (int i = 0; i < db.values.Count - 1; i++)
                 {
-                    newRow.Cells[j].Value = db.values[j][id];
+                    newRow.Cells[i].Value = db.values[i][id];
                 }
                 TableGridView.Rows.Add(newRow);
             }
-            
-            
-
         }
 
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -66,6 +62,7 @@ namespace PenisLerningWinforms
             if (TableGridView.CurrentRow.Cells[0].Value is null)
             {
                 db.InsertRow(db.columns.Skip(1).ToList().Select(x => TableGridView.CurrentRow.Cells[db.columns.IndexOf(x)].Value.ToString()).ToList());
+                UpdateTableView();
                 return;
             }
             

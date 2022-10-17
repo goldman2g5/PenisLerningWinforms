@@ -69,5 +69,15 @@ namespace PenisLerningWinforms.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap neco_arc_taunt {
+            get {
+                object obj = ResourceManager.GetObject("neco-arc-taunt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

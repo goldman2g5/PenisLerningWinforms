@@ -60,7 +60,7 @@ namespace PenisLerningWinforms
                                     result[index].Add(reader[index].ToString());
                                     index++;
                                 }
-                                catch (Exception ex)
+                                catch (Exception)
                                 {
                                     break;
                                 }
@@ -126,7 +126,7 @@ namespace PenisLerningWinforms
 
         private List<string> GetTables(string initialCatalog) => Execute($"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_CATALOG = '{initialCatalog}'")[0];
 
-        private List<string> GetColumns() => Execute($"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}' ORDER BY ORDINAL_POSITION")[0];
+        private List<string> GetColumns() => Execute($"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}'")[0];
 
         private List<List<string>> GetValues() => Execute($"SELECT *  FROM TBL.{table}");
 
