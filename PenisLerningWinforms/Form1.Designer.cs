@@ -37,10 +37,10 @@ namespace PenisLerningWinforms
             this.TableGridView = new System.Windows.Forms.DataGridView();
             this.MainTabControl1 = new Siticone.Desktop.UI.WinForms.SiticoneTabControl();
             this.TablePage = new System.Windows.Forms.TabPage();
+            this.siticoneImageButton1 = new Siticone.Desktop.UI.WinForms.SiticoneImageButton();
             this.TableSelectComboBox = new Siticone.Desktop.UI.WinForms.SiticoneComboBox();
             this.Hui = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.siticoneImageButton1 = new Siticone.Desktop.UI.WinForms.SiticoneImageButton();
             this.contextMenuStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TableGridView)).BeginInit();
             this.MainTabControl1.SuspendLayout();
@@ -134,6 +134,24 @@ namespace PenisLerningWinforms
             this.TablePage.TabIndex = 1;
             this.TablePage.Text = "Table";
             // 
+            // siticoneImageButton1
+            // 
+            this.siticoneImageButton1.CheckedState.ImageSize = new System.Drawing.Size(64, 64);
+            this.siticoneImageButton1.CheckedState.Parent = this.siticoneImageButton1;
+            this.siticoneImageButton1.HoverState.ImageSize = new System.Drawing.Size(64, 64);
+            this.siticoneImageButton1.HoverState.Parent = this.siticoneImageButton1;
+            this.siticoneImageButton1.Image = global::PenisLerningWinforms.Properties.Resources.database;
+            this.siticoneImageButton1.ImageOffset = new System.Drawing.Point(0, 0);
+            this.siticoneImageButton1.ImageRotate = 0F;
+            this.siticoneImageButton1.ImageSize = new System.Drawing.Size(36, 36);
+            this.siticoneImageButton1.Location = new System.Drawing.Point(1034, 0);
+            this.siticoneImageButton1.Name = "siticoneImageButton1";
+            this.siticoneImageButton1.PressedState.ImageSize = new System.Drawing.Size(64, 64);
+            this.siticoneImageButton1.PressedState.Parent = this.siticoneImageButton1;
+            this.siticoneImageButton1.ShadowDecoration.Parent = this.siticoneImageButton1;
+            this.siticoneImageButton1.Size = new System.Drawing.Size(36, 36);
+            this.siticoneImageButton1.TabIndex = 7;
+            // 
             // TableSelectComboBox
             // 
             this.TableSelectComboBox.BackColor = System.Drawing.Color.Transparent;
@@ -173,24 +191,6 @@ namespace PenisLerningWinforms
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "History";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // siticoneImageButton1
-            // 
-            this.siticoneImageButton1.CheckedState.ImageSize = new System.Drawing.Size(64, 64);
-            this.siticoneImageButton1.CheckedState.Parent = this.siticoneImageButton1;
-            this.siticoneImageButton1.HoverState.ImageSize = new System.Drawing.Size(64, 64);
-            this.siticoneImageButton1.HoverState.Parent = this.siticoneImageButton1;
-            this.siticoneImageButton1.Image = global::PenisLerningWinforms.Properties.Resources.database;
-            this.siticoneImageButton1.ImageOffset = new System.Drawing.Point(0, 0);
-            this.siticoneImageButton1.ImageRotate = 0F;
-            this.siticoneImageButton1.ImageSize = new System.Drawing.Size(36, 36);
-            this.siticoneImageButton1.Location = new System.Drawing.Point(1034, 0);
-            this.siticoneImageButton1.Name = "siticoneImageButton1";
-            this.siticoneImageButton1.PressedState.ImageSize = new System.Drawing.Size(64, 64);
-            this.siticoneImageButton1.PressedState.Parent = this.siticoneImageButton1;
-            this.siticoneImageButton1.ShadowDecoration.Parent = this.siticoneImageButton1;
-            this.siticoneImageButton1.Size = new System.Drawing.Size(36, 36);
-            this.siticoneImageButton1.TabIndex = 7;
             // 
             // Form1
             // 

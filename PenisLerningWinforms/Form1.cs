@@ -16,29 +16,31 @@ namespace PenisLerningWinforms
     {
         private BindingSource bindingSource1 = new BindingSource();
         private SqlDataAdapter dataAdapter = new SqlDataAdapter();
-        private List<string> tables = DataBase.Execute(
-        $"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_CATALOG = 'Timur'")[0]; //УЗНАВАТЬ АВТОМАТИЧЕСКИ ИМЯ БД
+        private static DataBase db = new DataBase();
+        private static List<string> tables = db.tables; //УЗНАВАТЬ АВТОМАТИЧЕСКИ ИМЯ БД
         string table;
         List<string> columns;
         List<List<string>> values;
 
-
+        
         public Form1()
         {
             InitializeComponent();
             DataBase.LogConsole = richTextBox1;
             tables.ForEach(x => TableSelectComboBox.Items.Add(x));
+            if (TableSelectComboBox.Items.Count > 0)
+                TableSelectComboBox.SelectedIndex = 0;
         }
 
 
         private void UpdateTableView()
         {
-            columns = DataBase.Execute($"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}' ORDER BY ORDINAL_POSITION")[0];
-            values = DataBase.Execute($"SELECT *  FROM TBL.{table}");
+            columns = db.columns;
+            values = db.values;
             TableGridView.Rows.Clear();
             TableGridView.Columns.Clear();
-            List<DataGridViewTextBoxColumn> columnObjects = columns.Select(x => new DataGridViewTextBoxColumn()).ToList();
-            columnObjects.ForEach(x => x.HeaderText = columns[columnObjects.IndexOf(x)]);
+            List<DataGridViewTextBoxColumn> columnObjects = db.columns.Select(x => new DataGridViewTextBoxColumn()).ToList();
+            columnObjects.ForEach(x => x.HeaderText = db.columns[columnObjects.IndexOf(x)]);
             TableGridView.Columns.AddRange(columnObjects.ToArray());
 
             for (int id = 0; id < values[0].Count; id++)
@@ -56,28 +58,26 @@ namespace PenisLerningWinforms
 
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (columns.Skip(1).ToList().Any(x => TableGridView.CurrentRow.Cells[columns.Skip(1).ToList().IndexOf(x)].Value is null))
+            if (columns.Skip(1).ToList().Any(x => TableGridView.CurrentRow.Cells[columns.ToList().IndexOf(x)].Value is null))
                 return;
 
             if (TableGridView.CurrentRow.Cells[0].Value is null)
             {
-                DataBase.InsertRow(table, columns.Select(x => TableGridView.CurrentRow.Cells[columns.IndexOf(x)].Value.ToString()).ToList());
+                db.InsertRow(columns.Skip(1).ToList().Select(x => TableGridView.CurrentRow.Cells[columns.IndexOf(x)].Value.ToString()).ToList());
                 return;
             }
-
-
-            DataBase.UpdateRow(table, TableGridView.CurrentRow.Cells[0].Value.ToString(), columns.Select(x => TableGridView.CurrentRow.Cells[columns.IndexOf(x)].Value.ToString()).ToList());
+            
+            db.UpdateRow(TableGridView.CurrentRow.Cells[0].Value.ToString(), columns.Select(x => TableGridView.CurrentRow.Cells[columns.IndexOf(x)].Value.ToString()).ToList());
         }
 
         private void dataGridView1_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
         {
-            DataBase.DeleteRow(table, e.Row.Cells[0].Value.ToString());
-
+            db.DeleteRow(e.Row.Cells[0].Value.ToString());
         }
 
         private void TableSelectComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            table = TableSelectComboBox.Items[TableSelectComboBox.SelectedIndex].ToString();
+            db.SwitchTable(TableSelectComboBox.Items[TableSelectComboBox.SelectedIndex].ToString());
             UpdateTableView();
         }
     }
