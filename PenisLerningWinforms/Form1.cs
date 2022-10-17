@@ -14,60 +14,62 @@ namespace PenisLerningWinforms
 {
     public partial class Form1 : Form
     {
-        private BindingSource bindingSource1 = new BindingSource();
-        private SqlDataAdapter dataAdapter = new SqlDataAdapter();
         private static DataBase db = new DataBase();
-        private static List<string> tables = db.tables; //УЗНАВАТЬ АВТОМАТИЧЕСКИ ИМЯ БД
-        string table;
-        List<string> columns;
-        List<List<string>> values;
 
-        
         public Form1()
         {
             InitializeComponent();
-            DataBase.LogConsole = richTextBox1;
-            tables.ForEach(x => TableSelectComboBox.Items.Add(x));
+            DataBase.LogConsole = LogConsole;
+            db.tables.ForEach(x => TableSelectComboBox.Items.Add(x));
             if (TableSelectComboBox.Items.Count > 0)
                 TableSelectComboBox.SelectedIndex = 0;
+           
         }
 
 
+        private void UpdateComboboxes()
+        {
+            ScalarColumnComboxBox.Items.Clear();
+            db.columns.Skip(1).ToList().ForEach(x => ScalarColumnComboxBox.Items.Add(x));
+        }
+
         private void UpdateTableView()
         {
-            columns = db.columns;
-            values = db.values;
+            db.Update();
+            UpdateComboboxes();
             TableGridView.Rows.Clear();
             TableGridView.Columns.Clear();
             List<DataGridViewTextBoxColumn> columnObjects = db.columns.Select(x => new DataGridViewTextBoxColumn()).ToList();
             columnObjects.ForEach(x => x.HeaderText = db.columns[columnObjects.IndexOf(x)]);
             TableGridView.Columns.AddRange(columnObjects.ToArray());
 
-            for (int id = 0; id < values[0].Count; id++)
+            for (int id = 0; id < db.values[0].Count; id++)
             {
                 DataGridViewRow newRow = new DataGridViewRow();
                 newRow.CreateCells(TableGridView);
-                for (int j = 0; j < values.Count - 1; j++)
+                for (int j = 0; j < db.values.Count - 1; j++)
                 {
-                    newRow.Cells[j].Value = values[j][id];
+                    newRow.Cells[j].Value = db.values[j][id];
                 }
                 TableGridView.Rows.Add(newRow);
             }
+            
+            
 
         }
 
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (columns.Skip(1).ToList().Any(x => TableGridView.CurrentRow.Cells[columns.ToList().IndexOf(x)].Value is null))
+            if (db.columns.Skip(1).ToList().Any(x => TableGridView.CurrentRow.Cells[db.columns.ToList().IndexOf(x)].Value is null))
                 return;
 
             if (TableGridView.CurrentRow.Cells[0].Value is null)
             {
-                db.InsertRow(columns.Skip(1).ToList().Select(x => TableGridView.CurrentRow.Cells[columns.IndexOf(x)].Value.ToString()).ToList());
+                db.InsertRow(db.columns.Skip(1).ToList().Select(x => TableGridView.CurrentRow.Cells[db.columns.IndexOf(x)].Value.ToString()).ToList());
                 return;
             }
             
-            db.UpdateRow(TableGridView.CurrentRow.Cells[0].Value.ToString(), columns.Select(x => TableGridView.CurrentRow.Cells[columns.IndexOf(x)].Value.ToString()).ToList());
+            db.UpdateRow(TableGridView.CurrentRow.Cells[0].Value.ToString(), db.columns.Select(x => TableGridView.CurrentRow.Cells[db.columns.IndexOf(x)].Value.ToString()).ToList());
         }
 
         private void dataGridView1_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
@@ -79,6 +81,17 @@ namespace PenisLerningWinforms
         {
             db.SwitchTable(TableSelectComboBox.Items[TableSelectComboBox.SelectedIndex].ToString());
             UpdateTableView();
+        }
+        
+        private void ScalarValueExecuteButton_Click(object sender, EventArgs e)
+        {
+            if (ScalarColumnComboxBox.SelectedIndex == -1 & ScalarCommandComboBox.SelectedIndex == -1)
+                return;
+            string text = db.GetScalarValue(ScalarCommandComboBox.SelectedItem.ToString(),
+                ScalarColumnComboxBox.SelectedItem.ToString());
+            if (text != null)
+                MessageBox.Show(text, "Scalar Value");
+
         }
     }
 }

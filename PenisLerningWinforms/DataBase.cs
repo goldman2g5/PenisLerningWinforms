@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PenisLerningWinforms
 {
-    class DataBase
+    internal class DataBase
     {
 
         public static RichTextBox LogConsole;
@@ -70,35 +67,68 @@ namespace PenisLerningWinforms
                             }
                             index = 0;
 
-                           
                         }
                     }
+                    
                     Log(queryString);
                     return result;
                 }
             }
-            catch (SqlException ex)
+            catch (SqlException e)
             {
                 
-                Log("--------------------\n\n\n" + queryString + "\n\n" + ex.Message + "\n\n\n--------------------");
+                Log("--------------------\n\n\n" + queryString + "\n" + e.Message + "\n\n\n--------------------");
+                MessageBox.Show(e.Message);
                 return null;
             }
 
         }
 
+        public string GetScalarValue(string command, string column)
+        {
+            string queryString = "";
+
+            if (command == "Count")
+                queryString = $"SELECT {command.ToUpper()}(*) FROM TBL.{table}";
+            if (command == "Min" | command == "Max" | command == "Sum")
+                queryString = $"SELECT {command.ToUpper()}({column}) FROM TBL.{table}";
+            
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    Log(queryString);
+                    return new SqlCommand(@queryString, connection).ExecuteScalar().ToString();
+                }
+                
+            }
+            catch (Exception e)
+            {
+                Log("--------------------\n\n\n" + queryString + "\n" + e.Message + "\n\n\n--------------------");
+                MessageBox.Show(e.Message);
+                return null;
+            }
+        }
+
         public void SwitchTable(string newTable)
         {
             table = newTable;
+            Update();
+
+        }
+
+        public void Update()
+        {
             columns = GetColumns();
             values = GetValues();
-
         }
 
         private List<string> GetTables(string initialCatalog) => Execute($"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_CATALOG = '{initialCatalog}'")[0];
 
         private List<string> GetColumns() => Execute($"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}' ORDER BY ORDINAL_POSITION")[0];
 
-        public List<List<string>> GetValues() => Execute($"SELECT *  FROM TBL.{table}");
+        private List<List<string>> GetValues() => Execute($"SELECT *  FROM TBL.{table}");
 
         public void DeleteRow(string id) => Execute($"DELETE TBL.{table} WHERE {GetColumns()[0]}='{id}'");
 

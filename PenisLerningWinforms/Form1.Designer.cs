@@ -30,7 +30,7 @@ namespace PenisLerningWinforms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.LogConsole = new System.Windows.Forms.RichTextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,21 +41,27 @@ namespace PenisLerningWinforms
             this.TableSelectComboBox = new Siticone.Desktop.UI.WinForms.SiticoneComboBox();
             this.Hui = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.ScalarCommandComboBox = new Siticone.Desktop.UI.WinForms.SiticoneComboBox();
+            this.ScalarColumnComboxBox = new Siticone.Desktop.UI.WinForms.SiticoneComboBox();
+            this.ScalarValueExecuteButton = new Siticone.Desktop.UI.WinForms.SiticoneButton();
             this.contextMenuStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TableGridView)).BeginInit();
             this.MainTabControl1.SuspendLayout();
             this.TablePage.SuspendLayout();
+            this.Hui.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // richTextBox1
+            // LogConsole
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(0, -4);
-            this.richTextBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(1065, 636);
-            this.richTextBox1.TabIndex = 1;
-            this.richTextBox1.Text = "";
+            this.LogConsole.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.LogConsole.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.LogConsole.Location = new System.Drawing.Point(0, 2);
+            this.LogConsole.Margin = new System.Windows.Forms.Padding(2);
+            this.LogConsole.Name = "LogConsole";
+            this.LogConsole.Size = new System.Drawing.Size(1090, 675);
+            this.LogConsole.TabIndex = 1;
+            this.LogConsole.Text = "";
             // 
             // contextMenuStrip1
             // 
@@ -174,23 +180,90 @@ namespace PenisLerningWinforms
             // 
             // Hui
             // 
+            this.Hui.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.Hui.Controls.Add(this.ScalarValueExecuteButton);
+            this.Hui.Controls.Add(this.ScalarColumnComboxBox);
+            this.Hui.Controls.Add(this.ScalarCommandComboBox);
             this.Hui.Location = new System.Drawing.Point(184, 4);
             this.Hui.Name = "Hui";
             this.Hui.Padding = new System.Windows.Forms.Padding(3);
             this.Hui.Size = new System.Drawing.Size(1092, 712);
             this.Hui.TabIndex = 0;
             this.Hui.Text = "Скалярные значения";
-            this.Hui.UseVisualStyleBackColor = true;
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.richTextBox1);
+            this.tabPage1.Controls.Add(this.LogConsole);
             this.tabPage1.Location = new System.Drawing.Point(184, 4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Size = new System.Drawing.Size(1092, 712);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "History";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // ScalarCommandComboBox
+            // 
+            this.ScalarCommandComboBox.BackColor = System.Drawing.Color.Transparent;
+            this.ScalarCommandComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.ScalarCommandComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ScalarCommandComboBox.FocusedColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.ScalarCommandComboBox.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.ScalarCommandComboBox.FocusedState.Parent = this.ScalarCommandComboBox;
+            this.ScalarCommandComboBox.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.ScalarCommandComboBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(88)))), ((int)(((byte)(112)))));
+            this.ScalarCommandComboBox.HoverState.Parent = this.ScalarCommandComboBox;
+            this.ScalarCommandComboBox.ItemHeight = 30;
+            this.ScalarCommandComboBox.Items.AddRange(new object[] {
+            "Min",
+            "Max",
+            "Count",
+            "Sum"});
+            this.ScalarCommandComboBox.ItemsAppearance.Parent = this.ScalarCommandComboBox;
+            this.ScalarCommandComboBox.Location = new System.Drawing.Point(6, 7);
+            this.ScalarCommandComboBox.Name = "ScalarCommandComboBox";
+            this.ScalarCommandComboBox.ShadowDecoration.Parent = this.ScalarCommandComboBox;
+            this.ScalarCommandComboBox.Size = new System.Drawing.Size(140, 36);
+            this.ScalarCommandComboBox.TabIndex = 1;
+            // 
+            // ScalarColumnComboxBox
+            // 
+            this.ScalarColumnComboxBox.BackColor = System.Drawing.Color.Transparent;
+            this.ScalarColumnComboxBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.ScalarColumnComboxBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ScalarColumnComboxBox.FocusedColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.ScalarColumnComboxBox.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.ScalarColumnComboxBox.FocusedState.Parent = this.ScalarColumnComboxBox;
+            this.ScalarColumnComboxBox.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.ScalarColumnComboxBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(88)))), ((int)(((byte)(112)))));
+            this.ScalarColumnComboxBox.HoverState.Parent = this.ScalarColumnComboxBox;
+            this.ScalarColumnComboxBox.ItemHeight = 30;
+            this.ScalarColumnComboxBox.ItemsAppearance.Parent = this.ScalarColumnComboxBox;
+            this.ScalarColumnComboxBox.Location = new System.Drawing.Point(152, 7);
+            this.ScalarColumnComboxBox.Name = "ScalarColumnComboxBox";
+            this.ScalarColumnComboxBox.ShadowDecoration.Parent = this.ScalarColumnComboxBox;
+            this.ScalarColumnComboxBox.Size = new System.Drawing.Size(140, 36);
+            this.ScalarColumnComboxBox.TabIndex = 2;
+            // 
+            // ScalarValueExecuteButton
+            // 
+            this.ScalarValueExecuteButton.CheckedState.Parent = this.ScalarValueExecuteButton;
+            this.ScalarValueExecuteButton.CustomImages.Parent = this.ScalarValueExecuteButton;
+            this.ScalarValueExecuteButton.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.ScalarValueExecuteButton.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.ScalarValueExecuteButton.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.ScalarValueExecuteButton.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.ScalarValueExecuteButton.DisabledState.Parent = this.ScalarValueExecuteButton;
+            this.ScalarValueExecuteButton.FillColor = System.Drawing.SystemColors.Control;
+            this.ScalarValueExecuteButton.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.ScalarValueExecuteButton.ForeColor = System.Drawing.Color.Black;
+            this.ScalarValueExecuteButton.HoverState.Parent = this.ScalarValueExecuteButton;
+            this.ScalarValueExecuteButton.Location = new System.Drawing.Point(6, 49);
+            this.ScalarValueExecuteButton.Name = "ScalarValueExecuteButton";
+            this.ScalarValueExecuteButton.ShadowDecoration.Parent = this.ScalarValueExecuteButton;
+            this.ScalarValueExecuteButton.Size = new System.Drawing.Size(286, 36);
+            this.ScalarValueExecuteButton.TabIndex = 3;
+            this.ScalarValueExecuteButton.Text = "Execute";
+            this.ScalarValueExecuteButton.Click += new System.EventHandler(this.ScalarValueExecuteButton_Click);
             // 
             // Form1
             // 
@@ -205,13 +278,14 @@ namespace PenisLerningWinforms
             ((System.ComponentModel.ISupportInitialize)(this.TableGridView)).EndInit();
             this.MainTabControl1.ResumeLayout(false);
             this.TablePage.ResumeLayout(false);
+            this.Hui.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox LogConsole;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
@@ -222,6 +296,9 @@ namespace PenisLerningWinforms
         private Siticone.Desktop.UI.WinForms.SiticoneComboBox TableSelectComboBox;
         private System.Windows.Forms.TabPage tabPage1;
         private Siticone.Desktop.UI.WinForms.SiticoneImageButton siticoneImageButton1;
+        private Siticone.Desktop.UI.WinForms.SiticoneComboBox ScalarCommandComboBox;
+        private Siticone.Desktop.UI.WinForms.SiticoneComboBox ScalarColumnComboxBox;
+        private Siticone.Desktop.UI.WinForms.SiticoneButton ScalarValueExecuteButton;
     }
 }
 
