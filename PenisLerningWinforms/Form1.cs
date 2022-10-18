@@ -90,5 +90,20 @@ namespace PenisLerningWinforms
                 MessageBox.Show(text, "Scalar Value");
 
         }
+
+        private void Insert_Click(object sender, EventArgs e)
+        {
+            db.ParameterInsert(siticoneTextBox1.Text, siticoneTextBox2.Text);
+        }
+
+        private void siticoneTextBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
