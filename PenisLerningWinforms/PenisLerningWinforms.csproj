@@ -94,5 +94,14 @@
   <ItemGroup>
     <None Include="Resources\neco-arc-taunt.gif" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rat-spinning.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rat-not-spinning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rat-spinning %281%29.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

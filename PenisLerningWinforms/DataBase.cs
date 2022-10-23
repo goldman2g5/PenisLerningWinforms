@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.Logging;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -11,8 +12,9 @@ namespace PenisLerningWinforms
     {
 
         public static RichTextBox LogConsole;
-        public List<string> tables;
-        private string table;
+        public static bool LogEnabled = true;
+        public List<string> tables; 
+        public string table;
         public List<string> columns;
         public List<List<string>> values;
 
@@ -30,16 +32,16 @@ namespace PenisLerningWinforms
 
         public DataBase()
         {
-            tables = GetTables("Timur");
+            tables = GetTables("MarketPlace_Database");
         }
 
         public static void Log(string str)
         {
-            if (!(LogConsole is null))
-                LogConsole.AppendText(str + "\n");
+            if (LogConsole is null | LogEnabled == false) return;
+            LogConsole.AppendText(str + "\n");
         }
 
-        public List<List<string>> Execute(string queryString)
+        public List<List<string>> Execute(string queryString, bool log=true)
         {
             List<List<string>> result = new List<List<string>>();
             try
@@ -72,17 +74,15 @@ namespace PenisLerningWinforms
 
                         }
                     }
-
                     Log(queryString);
                     return result;
                 }
             }
             catch (SqlException e)
             {
-
                 Log("--------------------\n\n\n" + queryString + "\n" + e.Message + "\n\n\n--------------------");
-                MessageBox.Show(e.Message);
-                return null;
+                //MessageBox.Show($"{queryString} \n\n {e.Number} {e.Message}");
+                return new List<List<string>>() { new List<string>() { e.Number.ToString() } };
             }
 
         }
@@ -92,9 +92,9 @@ namespace PenisLerningWinforms
             string queryString = "";
 
             if (command == "Count")
-                queryString = $"SELECT {command.ToUpper()}(*) FROM TBL.{table}";
+                queryString = $"SELECT {command.ToUpper()}(*) FROM dbo.{table}";
             if (command == "Min" | command == "Max" | command == "Sum")
-                queryString = $"SELECT {command.ToUpper()}({column}) FROM TBL.{table}";
+                queryString = $"SELECT {command.ToUpper()}({column}) FROM dbo.{table}";
 
             try
             {
@@ -117,7 +117,7 @@ namespace PenisLerningWinforms
         public void ParameterInsert(params string[] values)
         {
             string queryString =
-                $"INSERT INTO TBL.{table} ({columns.Skip(1).Aggregate((x, y) => x + "," + y)}) VALUES ({values.Select(x => $"'{x}'").Aggregate((x, y) => x + "," + y)})";
+                $"INSERT INTO dbo.{table} ({columns.Skip(1).Aggregate((x, y) => x + "," + y)}) VALUES ({values.Select(x => $"'{x}'").Aggregate((x, y) => x + "," + y)})";
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -133,7 +133,7 @@ namespace PenisLerningWinforms
             catch (Exception e)
             {
                 Log("--------------------\n\n\n" + queryString + "\n" + e.Message + "\n\n\n--------------------");
-                MessageBox.Show(e.Message);
+                MessageBox.Show($"{queryString} \n\n {e.Message}");
             }
         }
 
@@ -149,24 +149,33 @@ namespace PenisLerningWinforms
         {
             columns = GetColumns();
             values = GetValues();
+            List<List<string>>valuesCopy = new List<List<string>>(values);
+            //valuesCopy[1] = valuesCopy[1].Select(x => x).ToList().OrderByDescending(x => x).Select(x => x.ToString()).ToList();
+
+            //for (int i = 0; i < values.Count - 1; i++)
+            //{
+            //    if (i == 1)
+            //        continue;
+            //    values[i] = values[i].OrderByDescending(x => valuesCopy[1][valuesCopy.IndexOf(x)]).ToList();
+            //}
         }
 
         private List<string> GetTables(string initialCatalog) => Execute(
-                $"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_CATALOG = '{initialCatalog}'")
+            $"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_CATALOG = '{initialCatalog}'")
             [0];
 
         private List<string> GetColumns() =>
             Execute($"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}'")[0];
 
-        private List<List<string>> GetValues() => Execute($"SELECT *  FROM TBL.{table}");
+        private List<List<string>> GetValues() => Execute($"SELECT * FROM [dbo].[{table}]");
 
-        public void DeleteRow(string id) => Execute($"DELETE TBL.{table} WHERE {columns[0]}='{id}'");
+        public void DeleteRow(string id) => Execute($"DELETE dbo.{table} WHERE {columns[0]}='{id}'");
 
         public void InsertRow(List<string> values) =>
             Execute(
-                $"INSERT INTO TBL.{table} ({columns.Skip(1).Aggregate((x, y) => x + "," + y)}) VALUES ({values.Select(x => $"'{x}'").Aggregate((x, y) => x + "," + y)})");
+                $"INSERT INTO [dbo].[{table}] ({columns.Skip(1).Aggregate((x, y) => x + "," + y)}) VALUES ({values.Select(x => $"'{x}'").Aggregate((x, y) => x + "," + y)})");
 
-        public void UpdateRow(string id, List<string> values) => Execute($"UPDATE TBL.{table} " +
+        public void UpdateRow(string id, List<string> values) => Execute($"UPDATE dbo.{table} " +
                                                                          $"SET {columns.Skip(1).Select(x => $"{x}='{values.Skip(1).ToList()[GetColumns().Skip(1).ToList().IndexOf(x)]}'").Aggregate((i, j) => i + "," + j).Trim()} WHERE {GetColumns()[0]}='{id}'");
     }
 }
